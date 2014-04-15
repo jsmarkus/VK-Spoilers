@@ -1,4 +1,6 @@
-(function(storage, Ground, chrome) {
+(function(storage, chrome) {
+  var Ground = require('ground');
+
   var app = new Ground();
   app.use(new Ground.Router(app));
 
@@ -40,4 +42,4 @@
 
   app.listen();
 
-})(window.localStorage, window.Ground, chrome);
+})(window.localStorage, chrome);

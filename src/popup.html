@@ -1,0 +1,63 @@
+﻿<html>
+<head>
+    <title></title>
+</head>
+<body>
+
+    <div id="table">
+        <h4>{{title}}</h4>
+        <div v-repeat="items">
+            <div v-collapse="true">
+                <table>
+                    <tr>
+                        <td>
+                            <label><input v-model="enabled" type="checkbox" />Включен</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label><input v-model="save" type="checkbox" />Сохранять</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label><input v-model="regexp" type="checkbox" />RegExp</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Шаблон
+                        </td>
+                        <td>
+                            <input v-model="template" type="text" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Посты
+                        </td>
+                        <td>
+                            <label><input v-model="posts" value="0" type="radio" />Показывать</label>
+                            <label><input v-model="posts" value="1" type="radio" />Скрывать</label>
+                            <label><input v-model="posts" value="2" type="radio" />Удалять полностью</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Комментарии
+                        </td>
+                        <td>
+                            <label><input v-model="comments" value="0" type="radio" />Показывать</label>
+                            <label><input v-model="comments" value="1" type="radio" />Скрывать</label>
+                            <label><input v-model="comments" value="2" type="radio" />Удалять</label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="popup.js"></script>
+</body>
+</html>

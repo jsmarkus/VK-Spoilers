@@ -1,26 +1,29 @@
+
 function ge(e) {
   return document.getElementById(e);
 }
+
 function isObject(o) {
   return o != null && typeof(o) == "object";
 }
+
 function escapeHtml(text) {
   return text
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 function reloadRules() {
   var rulesHTML = [];
-   
-    // rule for reposts
-    var i = '_reposts';
-    var rule = config.reposts;
-	
-    rulesHTML.push('\
+
+  // rule for reposts
+  var i = '_reposts';
+  var rule = config.reposts;
+
+  rulesHTML.push('\
       <div id="rule' + i + '" class="rule collapsed">\
         <div id="rule' + i + '_short" class="rule_short">\
           <i id="rule' + i + '_icon" class="icon"></i><input id="rule' + i + '_enabled" type="checkbox" value="1"' + (rule.enabled ? ' checked' : '') + '/><span id="rule' + i + '_title" class="name">' + (rule.name) + '</span><input id="rule' + i + '_name" class="name_input" type="text" placeholder="Название правила" value="' + escapeHtml(rule.name) + '"/><a id="rule' + i + '_delete" class="delete" href="about:blank"></a>\
@@ -49,13 +52,13 @@ function reloadRules() {
             <label><input type="radio" id="rule' + i + '_comments_1" name="rule' + i + '_comments" value="1"' + (rule.comments == 1 ? ' checked' : '') + '/>скрывать</label>\
             <label><input type="radio" id="rule' + i + '_comments_2" name="rule' + i + '_comments" value="2"' + (rule.comments == 2 ? ' checked' : '') + '/>удалять</label>\
           </div>\
-		  <div class="row"><span>Открытые посты:</span>\
+          <div class="row"><span>Открытые посты:</span>\
             <label><input type="radio" id="rule' + i + '_save_0" name="rule' + i + '_save" value="0"' + (rule.save == 0 ? ' checked' : '') + '/>не запоминать</label>\
             <label><input type="radio" id="rule' + i + '_save_1" name="rule' + i + '_save" value="1"' + (rule.save == 1 ? ' checked' : '') + '/>запоминать</label>\
           </div>\
         </div>\
       </div>');
-  
+
   rules.forEach(function(rule, i) {
     rulesHTML.push('\
       <div id="rule' + i + '" class="rule collapsed">\
@@ -79,7 +82,7 @@ function reloadRules() {
             <label><input type="radio" id="rule' + i + '_comments_1" name="rule' + i + '_comments" value="1"' + (rule.comments == 1 ? ' checked' : '') + '/>скрывать</label>\
             <label><input type="radio" id="rule' + i + '_comments_2" name="rule' + i + '_comments" value="2"' + (rule.comments == 2 ? ' checked' : '') + '/>удалять</label>\
           </div>\
-		  <div class="row"><span>Сохранять открытые:</span>\
+          <div class="row"><span>Сохранять открытые:</span>\
             <label><input type="radio" id="rule' + i + '_save_0" name="rule' + i + '_save" value="0"' + (rule.save == 0 ? ' checked' : '') + '/>не запоминать</label>\
             <label><input type="radio" id="rule' + i + '_save_1" name="rule' + i + '_save" value="1"' + (rule.save == 1 ? ' checked' : '') + '/>запоминать</label>\
           </div>\
@@ -89,13 +92,13 @@ function reloadRules() {
   ge('rules').innerHTML = rulesHTML.join(''); //rules.length > 0 ? rulesHTML.join('') : '<div id="no_rules">Ни одного правила ещё не добавлено</div>';
 
   var processRules = function(rule, i) {
-    
+
     ge('rule' + i + '_short').onclick = function() {
       ge('rule' + i).className = (ge('rule' + i).className == 'rule') ? 'rule collapsed' : 'rule';
     }
 
     ge('rule' + i + '_enabled').onchange = function() {
-      rule.enabled = !!this.checked;
+      rule.enabled = !! this.checked;
       saveRules();
     }
 
@@ -162,7 +165,7 @@ function reloadRules() {
     }
 
     ge('rule' + i + '_regexp').onchange = function() {
-      rule.regexp = !!this.checked;
+      rule.regexp = !! this.checked;
       saveRules();
     }
 
@@ -177,19 +180,19 @@ function reloadRules() {
           rule.comments = j;
           saveRules();
         }
-		
-		if(j<=1){
-			ge('rule' + i + '_save_' + j).onclick = function() {
-			  rule.save = j;
-			  saveRules();
-			}
-		}
+
+        if (j <= 1) {
+          ge('rule' + i + '_save_' + j).onclick = function() {
+            rule.save = j;
+            saveRules();
+          }
+        }
       })(j);
     }
   };
 
   rules.forEach(processRules);
-  
+
   try {
     processRules(config.reposts, '_reposts');
     ge('rule_reposts_wall').onclick = function() {
@@ -221,12 +224,12 @@ try {
     config.reposts = {
       name: '<b>Скрыть репосты</b>',
       enabled: true,
-      scan_wall: 1, 
+      scan_wall: 1,
       scan_feed: 1,
       allow_quote: 1,
       posts: 1,
       comments: 2,
-	  save: 0
+      save: 0
     };
 } catch (e) {}
 reloadRules();
@@ -239,7 +242,7 @@ ge('add_rule').onclick = function() {
     regexp: false,
     posts: 1,
     comments: 1,
-	save: 0
+    save: 0
   });
   reloadRules();
   ge('rule' + (rules.length - 1) + '_short').onclick();

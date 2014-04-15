@@ -15,15 +15,12 @@
     "*://vk.com/*"
   ],
   "background": {
-    "scripts": [
-      "bower_components/ground/ground.js",
-      "background.js"
-    ]
+    "scripts": ["background.js"]
   },
   "options_page": "popup.html",
   "content_scripts": [{
     "matches": ["*://vk.com/*"],
-    "js": ["bower_components/ground/ground.js", "content.js"],
+    "js": ["content.js"],
     "run_at": "document_end"
   }],
   "page_action": {
