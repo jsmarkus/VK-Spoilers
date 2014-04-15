@@ -1,5 +1,5 @@
 {
-"update_url": "https://clients2.google.com/service/update2/crx",
+  "update_url": "https://clients2.google.com/service/update2/crx",
 
   "name": "VK Spoilers",
   "version": "1.4",
@@ -16,17 +16,16 @@
   ],
   "background": {
     "scripts": [
+      "bower_components/ground/ground.js",
       "background.js"
     ]
   },
   "options_page": "popup.html",
-  "content_scripts": [
-    {
-      "matches": ["*://vk.com/*"],
-      "js": ["content.js"],
-      "run_at": "document_end"
-    }
-  ],
+  "content_scripts": [{
+    "matches": ["*://vk.com/*"],
+    "js": ["bower_components/ground/ground.js", "content.js"],
+    "run_at": "document_end"
+  }],
   "page_action": {
     "default_icon": {
       "19": "icon-19.png",

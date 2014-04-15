@@ -3,15 +3,19 @@
 function ge(e) {
   return document.getElementById(e);
 }
+
 function isObject(o) {
   return o != null && typeof(o) == "object";
 }
+
 function geByClass(c, n) {
   return Array.prototype.slice.call((n || document).getElementsByClassName(c));
 }
+
 function geByClass1(c, n) {
   return (n || document).getElementsByClassName(c)[0];
 }
+
 function getRegexp(rule) {
   if (!rule.compiled) {
     rule.compiled = new RegExp(rule.template);
@@ -19,11 +23,15 @@ function getRegexp(rule) {
 
   return rule.compiled;
 }
+
 function getKeywords(rule) {
   if (!rule.compiled) {
     rule.compiled = [];
     var phrase = [];
-    var keyword = { exact: false, text: '' };
+    var keyword = {
+      exact: false,
+      text: ''
+    };
     for (var i = 0; i < rule.template.length; i++) {
       var ch = rule.template.charAt(i);
       if (!keyword.exact && ch == ',') { // start of new phrase
@@ -35,14 +43,20 @@ function getKeywords(rule) {
         }
 
         phrase = [];
-        keyword = { exact: false, text: '' };
+        keyword = {
+          exact: false,
+          text: ''
+        };
       } else
       if (ch == '"' || (!keyword.exact && ch == ' ')) { // start of new keyword
         if (keyword.text.trim()) {
           phrase.push(keyword);
         }
 
-        keyword = { exact: (ch == '"') && !keyword.exact, text: '' };
+        keyword = {
+          exact: (ch == '"') && !keyword.exact,
+          text: ''
+        };
       } else {
         keyword.text += keyword.exact ? ch : ch.toLocaleLowerCase();
       }
@@ -57,6 +71,7 @@ function getKeywords(rule) {
 
   return rule.compiled;
 }
+
 function update(list) {
   list = list || ge('page_wall_posts') || ge('feed_rows') || ge('results') || document.body;
 
@@ -70,7 +85,7 @@ function update(list) {
     var hideRepost = 0;
 
     var appliedRules = [];
-	var appliedRulesPars = [];
+    var appliedRulesPars = [];
 
     var postText = geByClass('wall_post_text', post);
     postText.forEach(function(text) {
@@ -80,7 +95,7 @@ function update(list) {
         if (rule.enabled) {
           var apply = false;
           if (rule.regexp) {
-            apply = !!str.match(getRegexp(rule));
+            apply = !! str.match(getRegexp(rule));
           } else {
             var keywords = getKeywords(rule);
 
@@ -104,7 +119,7 @@ function update(list) {
             if (rule.name && appliedRules.indexOf('<b>' + rule.name + '</b>') == -1) {
               appliedRules.push('<b>' + rule.name + '</b>');
             }
-			appliedRulesPars.push(rule);
+            appliedRulesPars.push(rule);
           }
         }
       });
@@ -118,40 +133,38 @@ function update(list) {
 
     // hide reposts
     if (scanRepostsEnabled)
-    if (
-         ( scanWallForReposts && isObject(ge('page_wall_posts' ))) ||
-         ( scanFeedForReposts && (isObject(ge('feed_rows')) || isObject(ge('results'))) )
-       )
-    {
-      var isRepost = false;
-      var isRepostWithText = false;
+      if (
+        (scanWallForReposts && isObject(ge('page_wall_posts'))) ||
+        (scanFeedForReposts && (isObject(ge('feed_rows')) || isObject(ge('results'))))
+      ) {
+        var isRepost = false;
+        var isRepostWithText = false;
 
-      repostText = geByClass('published_by_wrap', post);
-      repostText.forEach(function(text) {
-        isRepost = true;
-      });
+        repostText = geByClass('published_by_wrap', post);
+        repostText.forEach(function(text) {
+          isRepost = true;
+        });
 
-      // reposts as quote
-      var repostText = geByClass('published_by_quote', post);
-      repostText.forEach(function(text) {
-        isRepostWithText = true;
-      });
+        // reposts as quote
+        var repostText = geByClass('published_by_quote', post);
+        repostText.forEach(function(text) {
+          isRepostWithText = true;
+        });
 
-      if (isRepost && (!isRepostWithText || !config.reposts.allow_quote))
-      {
-        hideBody = config.reposts.posts;
-        hideComments = config.reposts.comments;
-        hideRepost = true;
-		appliedRulesPars.push(config.reposts);
+        if (isRepost && (!isRepostWithText || !config.reposts.allow_quote)) {
+          hideBody = config.reposts.posts;
+          hideComments = config.reposts.comments;
+          hideRepost = true;
+          appliedRulesPars.push(config.reposts);
+        }
       }
-    }
 
-	post.save_mode = 0;
-	appliedRulesPars.forEach(function(rule){
-		if(rule.save == 1) post.save_mode = 1;
-	});
+    post.save_mode = 0;
+    appliedRulesPars.forEach(function(rule) {
+      if (rule.save == 1) post.save_mode = 1;
+    });
 
-	if ((opened[post.id] & 1) != 0) {
+    if ((opened[post.id] & 1) != 0) {
       hideBody = 0;
     }
     if ((opened[post.id] & 2) != 0) {
@@ -172,7 +185,7 @@ function update(list) {
 
     if (hideBody) {
       var old = {};
-      for (var i = postBody.children.length-1; i >= 1; i--) {
+      for (var i = postBody.children.length - 1; i >= 1; i--) {
         old[i] = postBody.children[i];
         postBody.removeChild(postBody.children[i]);
         //old[i] = postBody.children[i].style.display;
@@ -194,10 +207,18 @@ function update(list) {
         }
         bodySpoiler.style.display = 'none';
 
-		if(post.save_mode == 1){
-       		opened[post.id] = opened[post.id] | state;
-        	chrome.extension.sendRequest({method: "setOpened", id: post.id, state: state});
-		}
+        if (post.save_mode == 1) {
+          opened[post.id] = opened[post.id] | state;
+          Ground.request('setOpened', {
+            id: post.id,
+            state: state
+          });
+          // chrome.extension.sendRequest({
+          //   method: "setOpened",
+          //   id: post.id,
+          //   state: state
+          // });
+        }
       }
     }
 
@@ -211,10 +232,18 @@ function update(list) {
           commentsSpoiler.style.display = 'none';
           postComments.style.display = 'block';
 
-		  if(post.save_mode == 1){
-          	opened[post.id] = opened[post.id] | 2;
-          	chrome.extension.sendRequest({method: "setOpened", id: post.id, state: 2});
-		  }
+          if (post.save_mode == 1) {
+            opened[post.id] = opened[post.id] | 2;
+            Ground.request('setOpened', {
+              id: post.id,
+              state: 2
+            });
+            // chrome.extension.sendRequest({
+            //   method: "setOpened",
+            //   id: post.id,
+            //   state: 2
+            // });
+          }
         }
       }
     }
@@ -239,21 +268,22 @@ function togglePost(spoiler) {
 
 var rules = [];
 var opened = {};
-chrome.extension.sendRequest({method: "getConfig"}, function(response) {
-  rules = response.rules;
-  config = response.config;
-  opened = response.opened;
-  (new MutationObserver(function(mutations, observer) {
-    mutations.forEach(function(mutation) {
-      if (mutation.target.id == 'wrap3' || mutation.target.id == 'profile_wide' || mutation.target.id == 'results_wrap') {
-        update();
-      } else if (mutation.target.id == 'page_wall_posts' || mutation.target.id == 'feed_rows' || mutation.target.id.indexOf('feed_row') === 0) {
-        update(mutation.target);
-      }
+Ground.request('getConfig').then(
+  function(response) {
+    rules = response.rules;
+    config = response.config;
+    opened = response.opened;
+    (new MutationObserver(function(mutations, observer) {
+      mutations.forEach(function(mutation) {
+        if (mutation.target.id == 'wrap3' || mutation.target.id == 'profile_wide' || mutation.target.id == 'results_wrap') {
+          update();
+        } else if (mutation.target.id == 'page_wall_posts' || mutation.target.id == 'feed_rows' || mutation.target.id.indexOf('feed_row') === 0) {
+          update(mutation.target);
+        }
+      });
+    })).observe(ge('page_body'), {
+      childList: true,
+      subtree: true
     });
-  })).observe(ge('page_body'), {
-    childList: true,
-    subtree: true
+    update();
   });
-  update();
-});
