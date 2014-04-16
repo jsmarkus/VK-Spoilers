@@ -1,41 +1,23 @@
 ﻿<html>
 <head>
     <title></title>
+    <link rel="stylesheet" type="text/css" href="popup.css" />
 </head>
 <body>
-
     <div id="table">
         <h4>{{title}}</h4>
         <div v-repeat="items">
-            <div v-collapse="true">
+            <details>
+                <summary>{{name}}</summary>
                 <table>
+                    <tr><td><label><input v-model="enabled" type="checkbox" />Включен</label></td></tr>
+                    <tr><td><label><input v-model="save" type="checkbox" />Сохранять</label></td></tr>
+                    <tr><td><label><input v-model="regexp" type="checkbox" />RegExp</label></td></tr>
                     <tr>
-                        <td>
-                            <label><input v-model="enabled" type="checkbox" />Включен</label>
-                        </td>
+                        <td>Шаблон</td>
+                        <td><input v-model="template" type="text" /></td>
                     </tr>
-                    <tr>
-                        <td>
-                            <label><input v-model="save" type="checkbox" />Сохранять</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label><input v-model="regexp" type="checkbox" />RegExp</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Шаблон
-                        </td>
-                        <td>
-                            <input v-model="template" type="text" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Посты
-                        </td>
+                    <tr><td>Посты</td>
                         <td>
                             <label><input v-model="posts" value="0" type="radio" />Показывать</label>
                             <label><input v-model="posts" value="1" type="radio" />Скрывать</label>
@@ -43,9 +25,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            Комментарии
-                        </td>
+                        <td>Комментарии</td>
                         <td>
                             <label><input v-model="comments" value="0" type="radio" />Показывать</label>
                             <label><input v-model="comments" value="1" type="radio" />Скрывать</label>
@@ -53,7 +33,7 @@
                         </td>
                     </tr>
                 </table>
-            </div>
+            </details>
         </div>
     </div>
 

@@ -42,18 +42,18 @@ module.exports = function(grunt) {
       }
     },
 
-
-
     watch: {
       dev: {
         files: [
           './src/**/*.js',
           './src/**/*.json',
           './src/**/*.html',
-          './src/**/*.png'
+          './src/**/*.png',
+          './src/**/*.less'
         ],
         tasks: [
           'browserify:dev',
+          'less:dev',
           'copy:dev'
         ],
         options: {
@@ -64,6 +64,18 @@ module.exports = function(grunt) {
       }
     },
 
+    less: {
+      dev: {
+        options: {
+          compress: false,
+          ieCompat: false,
+          cleancss: true
+        },
+        files: {
+          '<%= dirDebug %>popup.css': 'src/popup.less'
+        }
+      }
+    },
 
 
     connect: {
@@ -74,8 +86,6 @@ module.exports = function(grunt) {
         }
       }
     },
-
-
 
     copy: {
       dev: {
@@ -106,6 +116,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-less');
 
   grunt.registerTask('debug', [
     'browserify:dev',
